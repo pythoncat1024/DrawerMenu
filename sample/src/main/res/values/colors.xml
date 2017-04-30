@@ -6,4 +6,5 @@
     <color name="colorNormal">#00000000</color>
     <color name="colorPressed">#3333b5e5</color>
     <color name="colorLeftBackground">#66aa66cc</color>
+    <color name="colorMainBackground">#4499cc00</color>
 </resources>
