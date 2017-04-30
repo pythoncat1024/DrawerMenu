@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DrawerMenu.iml" filepath="$PROJECT_DIR$/DrawerMenu.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/drawerlayout/drawerlayout.iml" filepath="$PROJECT_DIR$/drawerlayout/drawerlayout.iml" />
     </modules>
   </component>
 </project>
