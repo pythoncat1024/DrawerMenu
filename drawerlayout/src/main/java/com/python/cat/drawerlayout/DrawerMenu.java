@@ -1,6 +1,7 @@
 package com.python.cat.drawerlayout;
 
 import android.content.Context;
+import android.support.annotation.IntDef;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -15,6 +16,16 @@ import android.view.ViewGroup;
  */
 
 public class DrawerMenu extends ViewGroup {
+
+    private static final int OPEN_LEFT = 0;
+    private static final int OPEN_MAIN = 1;
+
+    @IntDef({OPEN_LEFT, OPEN_MAIN})
+    public @interface DrawerState {
+    }
+
+    @DrawerState
+    private int currentState = OPEN_LEFT;
 
     private View mLeftMenuLayout;
     private View mMainLayout;
@@ -109,6 +120,22 @@ public class DrawerMenu extends ViewGroup {
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                if (getScrollX() < -leftWidth / 2) {
+                    // open left
+                    currentState = OPEN_LEFT;
+                } else {
+                    // open main
+                    currentState = OPEN_MAIN;
+                }
+
+                switch (currentState) {
+                    case OPEN_LEFT:
+                        scrollTo(-mLeftMenuLayout.getMeasuredWidth(), 0);
+                        break;
+                    case OPEN_MAIN:
+                        scrollTo(0, 0);
+                        break;
+                }
                 break;
         }
         return true;
