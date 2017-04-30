@@ -7,6 +7,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apkfuns.logutils.LogUtils;
+import com.python.cat.drawerlayout.DrawerMenu;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,6 +15,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final DrawerMenu dm = (DrawerMenu) findViewById(R.id.dm_layout);
+        findViewById(R.id.main_tv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dm.changeState();
+            }
+        });
     }
 
     public void leftMenuClick(View view) {
