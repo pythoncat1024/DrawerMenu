@@ -22,12 +22,13 @@ public class DrawerMenu extends ViewGroup {
     private static final int OPEN_MAIN = 1;
     private Scroller mScroller;
 
+    @SuppressWarnings("WeakerAccess")
     @IntDef({OPEN_LEFT, OPEN_MAIN})
     public @interface DrawerState {
     }
 
     @DrawerState
-    private int currentState = OPEN_LEFT;
+    private int currentState = OPEN_MAIN;
 
     private View mLeftMenuLayout;
     private View mMainLayout;
@@ -130,42 +131,72 @@ public class DrawerMenu extends ViewGroup {
                     // open main
                     currentState = OPEN_MAIN;
                 }
-
-                switch (currentState) {
-                    case OPEN_LEFT:
-//                        scrollTo(-mLeftMenuLayout.getMeasuredWidth(), 0);
-                    {
-
-                        // startX = getScrollX();
-                        // endX = -mLeftMenuLayout.getMeasuredWidth();
-                        // offsetX = endX - startX;
-                        int offsetX = -mLeftMenuLayout.getMeasuredWidth() - getScrollX();
-                        int duration = Math.abs(offsetX) * 5;
-                        if (duration > 1000) {
-                            duration = 1000;
-                        }
-                        mScroller.startScroll(getScrollX(), getScrollY(),
-                                offsetX, 0, duration);
-                        invalidate();
-                    }
-                    break;
-                    case OPEN_MAIN:
-//                        scrollTo(0, 0);
-                    {
-                        int offsetX = 0 - getScrollX();
-                        int duration = Math.abs(offsetX) * 5;
-                        if (duration > 1000) {
-                            duration = 1000;
-                        }
-                        mScroller.startScroll(getScrollX(), getScrollY(),
-                                offsetX, 0, duration);
-                        invalidate();
-                    }
-                    break;
-                }
+                switchState();
                 break;
         }
         return true;
+    }
+
+    private void switchState() {
+        switch (currentState) {
+            case OPEN_LEFT:
+//                        scrollTo(-mLeftMenuLayout.getMeasuredWidth(), 0);
+                openLeft();
+                break;
+            case OPEN_MAIN:
+            default:
+//                        scrollTo(0, 0);
+                openMain();
+                break;
+        }
+    }
+
+    private void openLeft() {
+        // startX = getScrollX();
+        // endX = -mLeftMenuLayout.getMeasuredWidth();
+        // offsetX = endX - startX;
+        int offsetX = -mLeftMenuLayout.getMeasuredWidth() - getScrollX();
+        int duration = Math.abs(offsetX) * 5;
+        if (duration > 1000) {
+            duration = 1000;
+        }
+        mScroller.startScroll(getScrollX(), getScrollY(),
+                offsetX, 0, duration);
+        invalidate();
+    }
+
+    private void openMain() {
+        int offsetX = 0 - getScrollX();
+        int duration = Math.abs(offsetX) * 5;
+        if (duration > 1000) {
+            duration = 1000;
+        }
+        mScroller.startScroll(getScrollX(), getScrollY(),
+                offsetX, 0, duration);
+        invalidate();
+    }
+
+    @DrawerState
+    public int changeState() {
+        switch (currentState) {
+            case OPEN_LEFT:
+                // change 2 open main
+                openMain();
+                currentState = OPEN_MAIN;
+                break;
+            case OPEN_MAIN:
+            default:
+                openLeft();
+                currentState = OPEN_LEFT;
+                break;
+        }
+        return currentState;
+    }
+
+    @SuppressWarnings("unused")
+    @DrawerState
+    public int getCurrentState() {
+        return this.currentState;
     }
 
     @Override
@@ -176,4 +207,5 @@ public class DrawerMenu extends ViewGroup {
             postInvalidate();
         }
     }
+
 }
