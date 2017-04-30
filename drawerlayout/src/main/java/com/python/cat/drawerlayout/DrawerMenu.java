@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Scroller;
 
 /**
  * packageName: com.python.cat.drawerlayout
@@ -19,6 +20,7 @@ public class DrawerMenu extends ViewGroup {
 
     private static final int OPEN_LEFT = 0;
     private static final int OPEN_MAIN = 1;
+    private Scroller mScroller;
 
     @IntDef({OPEN_LEFT, OPEN_MAIN})
     public @interface DrawerState {
@@ -56,6 +58,7 @@ public class DrawerMenu extends ViewGroup {
         }
         mLeftMenuLayout = getChildAt(0);
         mMainLayout = getChildAt(1);
+        mScroller = new Scroller(getContext());
     }
 
     @Override
@@ -130,14 +133,47 @@ public class DrawerMenu extends ViewGroup {
 
                 switch (currentState) {
                     case OPEN_LEFT:
-                        scrollTo(-mLeftMenuLayout.getMeasuredWidth(), 0);
-                        break;
+//                        scrollTo(-mLeftMenuLayout.getMeasuredWidth(), 0);
+                    {
+
+                        // startX = getScrollX();
+                        // endX = -mLeftMenuLayout.getMeasuredWidth();
+                        // offsetX = endX - startX;
+                        int offsetX = -mLeftMenuLayout.getMeasuredWidth() - getScrollX();
+                        int duration = Math.abs(offsetX) * 5;
+                        if (duration > 1000) {
+                            duration = 1000;
+                        }
+                        mScroller.startScroll(getScrollX(), getScrollY(),
+                                offsetX, 0, duration);
+                        invalidate();
+                    }
+                    break;
                     case OPEN_MAIN:
-                        scrollTo(0, 0);
-                        break;
+//                        scrollTo(0, 0);
+                    {
+                        int offsetX = 0 - getScrollX();
+                        int duration = Math.abs(offsetX) * 5;
+                        if (duration > 1000) {
+                            duration = 1000;
+                        }
+                        mScroller.startScroll(getScrollX(), getScrollY(),
+                                offsetX, 0, duration);
+                        invalidate();
+                    }
+                    break;
                 }
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void computeScroll() {
+        if (mScroller.computeScrollOffset()) {
+            // mScrollX = mScroller.getCurrX();
+            scrollTo(mScroller.getCurrX(), 0);
+            postInvalidate();
+        }
     }
 }
