@@ -3,6 +3,7 @@ package com.python.cat.drawerlayout;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,6 +18,7 @@ public class DrawerMenu extends ViewGroup {
 
     private View mLeftMenuLayout;
     private View mMainLayout;
+    private int downX;
 
     public DrawerMenu(Context context) {
         this(context, null);
@@ -78,5 +80,25 @@ public class DrawerMenu extends ViewGroup {
         @SuppressWarnings("UnnecessaryLocalVariable") int contentRight = contentWidth;
         @SuppressWarnings("UnnecessaryLocalVariable") int contentBottom = contentHeight;
         mMainLayout.layout(contentLeft, contentTop, contentRight, contentBottom);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                downX = Math.round(event.getX());
+                break;
+            case MotionEvent.ACTION_MOVE:
+                int moveX = Math.round(event.getX());
+                int dx = downX - moveX; // move screen,not the layout !
+                Log.d("aa", "dx = " + dx);
+                scrollBy(dx, 0);
+                downX = moveX;
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                break;
+        }
+        return true;
     }
 }
