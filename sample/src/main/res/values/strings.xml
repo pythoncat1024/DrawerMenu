@@ -20,4 +20,5 @@
     <string name="item18">item18</string>
     <string name="item19">item19</string>
     <string name="item20">item20</string>
+    <string name="content_layout">ContentLayout</string>
 </resources>
