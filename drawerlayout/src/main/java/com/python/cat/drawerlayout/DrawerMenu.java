@@ -20,6 +20,7 @@ public class DrawerMenu extends ViewGroup {
 
     private static final int OPEN_LEFT = 0;
     private static final int OPEN_MAIN = 1;
+    public static final int BORDER_TOUCH_WIDTH = 50; // 边界触摸 50px以内都算边界
     private Scroller mScroller;
     private int downY;
 
@@ -110,8 +111,17 @@ public class DrawerMenu extends ViewGroup {
                 int moveY = Math.round(ev.getY());
                 int dx = downX - moveX; // move screen,not the layout !
                 int dy = downY - moveY;
-
-                if (Math.abs(dx) > Math.abs(dy)) {
+                boolean showIntercept = false;
+                switch (currentState) {
+                    case OPEN_LEFT:
+                        showIntercept = Math.abs(dx) > Math.abs(dy);
+                        break;
+                    case OPEN_MAIN:
+                    default:
+                        showIntercept = Math.abs(dx) > Math.abs(dy) && (downX < BORDER_TOUCH_WIDTH);
+                        break;
+                }
+                if (showIntercept) {
                     return true;
                 }
                 downX = Math.round(ev.getX());
