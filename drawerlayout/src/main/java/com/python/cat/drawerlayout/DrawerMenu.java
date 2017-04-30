@@ -21,6 +21,7 @@ public class DrawerMenu extends ViewGroup {
     private static final int OPEN_LEFT = 0;
     private static final int OPEN_MAIN = 1;
     private Scroller mScroller;
+    private int downY;
 
     @SuppressWarnings("WeakerAccess")
     @IntDef({OPEN_LEFT, OPEN_MAIN})
@@ -95,6 +96,32 @@ public class DrawerMenu extends ViewGroup {
         @SuppressWarnings("UnnecessaryLocalVariable") int contentRight = contentWidth;
         @SuppressWarnings("UnnecessaryLocalVariable") int contentBottom = contentHeight;
         mMainLayout.layout(contentLeft, contentTop, contentRight, contentBottom);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                downX = Math.round(ev.getX());
+                downY = Math.round(ev.getY());
+                break;
+            case MotionEvent.ACTION_MOVE:
+                int moveX = Math.round(ev.getX());
+                int moveY = Math.round(ev.getY());
+                int dx = downX - moveX; // move screen,not the layout !
+                int dy = downY - moveY;
+
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    return true;
+                }
+                downX = Math.round(ev.getX());
+                downY = Math.round(ev.getY());
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                break;
+        }
+        return super.onInterceptTouchEvent(ev);
     }
 
     @Override
@@ -186,6 +213,7 @@ public class DrawerMenu extends ViewGroup {
                 break;
             case OPEN_MAIN:
             default:
+                // change 2 open left
                 openLeft();
                 currentState = OPEN_LEFT;
                 break;
