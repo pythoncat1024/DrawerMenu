@@ -84,6 +84,8 @@ public class DrawerMenu extends ViewGroup {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        int leftWidth = mLeftMenuLayout.getMeasuredWidth();
+        Log.v("xx", "leftWidth = " + leftWidth);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 downX = Math.round(event.getX());
@@ -91,7 +93,17 @@ public class DrawerMenu extends ViewGroup {
             case MotionEvent.ACTION_MOVE:
                 int moveX = Math.round(event.getX());
                 int dx = downX - moveX; // move screen,not the layout !
-                Log.d("aa", "dx = " + dx);
+
+                float scrollX = getScrollX();
+                Log.d("aa", "dx = " + dx + " scrollX = " + scrollX
+                        + " | scrollX + dx = " + (dx + scrollX));
+                if (scrollX + dx < -leftWidth) {
+                    scrollTo(-mLeftMenuLayout.getMeasuredWidth(), 0);
+                } else if (scrollX + dx > 0) {
+                    scrollTo(0, 0);
+                } else {
+                    scrollBy(dx, 0);
+                }
                 scrollBy(dx, 0);
                 downX = moveX;
                 break;
