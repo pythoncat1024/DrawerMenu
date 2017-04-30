@@ -111,7 +111,7 @@ public class DrawerMenu extends ViewGroup {
                 int moveY = Math.round(ev.getY());
                 int dx = downX - moveX; // move screen,not the layout !
                 int dy = downY - moveY;
-                boolean showIntercept = false;
+                boolean showIntercept;
                 switch (currentState) {
                     case OPEN_LEFT:
                         showIntercept = Math.abs(dx) > Math.abs(dy);
